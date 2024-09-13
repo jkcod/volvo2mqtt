@@ -549,10 +549,14 @@ def cached_request(url, method, vin, force_update=False, key_change=False):
 
 
 def parse_api_data(data, sensor_id=None):
-    if sensor_id != "api_backend_status":
+     if sensor_id != "api_backend_status" and sensor_id != "trips":
+        logging.info("Sensor ID: " + sensor_id)
         data = data["data"]
 
-    if sensor_id == "battery_charge_level":
+    if sensor_id == "trips":
+        logging.info("Trips: " + json.dumps(data))
+        return data["trips"][:50];
+    elif sensor_id == "battery_charge_level":
         return data["batteryChargeLevel"]["value"] if util.keys_exists(data, "batteryChargeLevel") else None
     elif sensor_id == "battery_capacity":
         return data["batteryCapacityKWH"] if util.keys_exists(data, "batteryCapacityKWH") else None
